@@ -64,20 +64,3 @@ RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.
     ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
 
 RUN echo -e "date.timezone=\"Asia/Singapore\"" > /etc/php.d/timezone.ini
-
-# RUN curl -sL https://rpm.nodesource.com/setup_9.x | bash -
-
-# RUN yum -y install nodejs
-
-# RUN npm install -g api-console-cli
-
-# RUN npm install -g bower
-
-# Other configs / timezone, short tags, etc
-# COPY settings/php.d /etc/php.d
-
-# # Adding the configuration file of the nginx
-# COPY settings/nginx/conf.d /etc/nginx/conf.d
-# ADD  settings/nginx/nginx.conf /etc/nginx/nginx.conf
-
-# CMD ["sh","scripts/start.sh"]
