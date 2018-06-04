@@ -4,6 +4,8 @@
 FROM centos:6
 MAINTAINER Louie Miranda <lmiranda@gmail.com>
 
+WORKDIR /tmp
+
 RUN yum -y install epel-release
 RUN yum -y install wget
 RUN wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
