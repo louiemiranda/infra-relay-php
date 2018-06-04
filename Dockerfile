@@ -18,30 +18,64 @@ RUN yum -y install php56u-fpm php56u php56u-opcache php56u-xml php56u-mcrypt php
 # RUN yum -y install mysql-server mysql-client
 
 # Install MariaDB
-RUN echo -e "[mariadb]" >> /etc/yum.repos.d/MariaDB.repo && \
-    echo -e "name = MariaDB" >> /etc/yum.repos.d/MariaDB.repo && \
-    echo -e "baseurl = http://yum.mariadb.org/10.0/centos6-amd64" >> /etc/yum.repos.d/MariaDB.repo && \
-    echo -e "gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB" >> /etc/yum.repos.d/MariaDB.repo && \
-    echo -e "gpgcheck=1" >> /etc/yum.repos.d/MariaDB.repo && \
-    yum -y install MariaDB-Galera-server MariaDB-client galera
+# RUN echo -e "[mariadb]" >> /etc/yum.repos.d/MariaDB.repo && \
+#     echo -e "name = MariaDB" >> /etc/yum.repos.d/MariaDB.repo && \
+#     echo -e "baseurl = http://yum.mariadb.org/10.0/centos6-amd64" >> /etc/yum.repos.d/MariaDB.repo && \
+#     echo -e "gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB" >> /etc/yum.repos.d/MariaDB.repo && \
+#     echo -e "gpgcheck=1" >> /etc/yum.repos.d/MariaDB.repo && \
+#     yum -y install MariaDB-Galera-server MariaDB-client galera
 
-# Installing nginx 
+# INSTALL WEB ESSENTIALS
+
+## Installing nginx 
 RUN yum -y install nginx
 
-# Installing compiler, git 
-RUN yum -y install git gcc
+## Installing git
+RUN yum -y install git
 
-# Installing other utilities
+## Installing other utilities
 RUN yum -y install git software-properties-common zip unzip
 
 # Install Composer and make it available in the PATH
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
+# Install Automation Tools
+RUN yum -y install ansible
+
+RUN curl -SLO "https://s3.amazonaws.com/codeship-jet-releases/1.19.3/jet-linux_amd64_1.19.3.tar.gz"
+
+RUN tar -xaC /usr/local/bin -f jet-linux_amd64_1.19.3.tar.gz
+
+RUN chmod +x /usr/local/bin/jet
+
+RUN wget http://stedolan.github.io/jq/download/linux64/jq
+
+RUN chmod +x ./jq
+
+RUN cp jq /usr/bin
+
+# Misc
+RUN pear install XML_Parser
+
+RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip" && \
+    unzip awscli-bundle.zip && \
+    ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+RUN echo -e "date.timezone=\"Asia/Singapore\"" > /etc/php.d/timezone.ini
+
+# RUN curl -sL https://rpm.nodesource.com/setup_9.x | bash -
+
+# RUN yum -y install nodejs
+
+# RUN npm install -g api-console-cli
+
+# RUN npm install -g bower
+
 # Other configs / timezone, short tags, etc
-COPY settings/php.d /etc/php.d
+# COPY settings/php.d /etc/php.d
 
-# Adding the configuration file of the nginx
-COPY settings/nginx/conf.d /etc/nginx/conf.d
-ADD  settings/nginx/nginx.conf /etc/nginx/nginx.conf
+# # Adding the configuration file of the nginx
+# COPY settings/nginx/conf.d /etc/nginx/conf.d
+# ADD  settings/nginx/nginx.conf /etc/nginx/nginx.conf
 
-CMD ["sh","scripts/start.sh"]
+# CMD ["sh","scripts/start.sh"]
